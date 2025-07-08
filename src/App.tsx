@@ -13,14 +13,19 @@ export default function App() {
   }
 
   const [gasolina,setGasolina] = useState(0)
-  const [alcool,setAcool] = useState(0)  
+  const [alcool,setAlcool] = useState(0)  
   const [info,setInfo] = useState<InfoProps>()
 
   function calcular(event: FormEvent){
     event.preventDefault()
 
-    let calculo = (alcool/gasolina)
+    if(gasolina === 0 || alcool === 0){
+      alert("Todos os valores devem ser maiores que 0!")
+      return
+    }
 
+    let calculo = (alcool/gasolina)
+   
     if(calculo <=0.7){
       setInfo({
         title: "Compensa usar Álcool",
@@ -31,7 +36,7 @@ export default function App() {
       setInfo({
         title: "Compensa usar Gasolina!",
         gasolina: formatarMoeda(gasolina),
-        alcool: formatarMoeda(gasolina),
+        alcool: formatarMoeda(alcool),
       })
     }
   }
@@ -53,14 +58,14 @@ export default function App() {
 
         <h1 className="title">Qual a melhor opção?</h1>
       
-        <form className="form">
+        <form className="form" onSubmit={calcular}>
           <label className="label">Alcool (preço por litro):</label><br />
-          <input className="input" type="number" placeholder="4,90" min="1" step="0.01" required onChange={(e)=> setAcool(Number(e.target.value)) } /><br/>
+          <input className="input" type="number" placeholder="4,90" min="1" step="0.01" required onChange={(e)=> setAlcool(Number(e.target.value)) } /><br/>
           
           <label className="label">Gasolina (preço por litro):</label><br />
-          <input className="input" type="number" placeholder="4,90" min="1" step="0.01" required  onChange={(e)=> setGasolina(Number(e.target.value)) }/><br />  
+          <input className="input" type="number" placeholder="4,90" min="1" step="0.01" required onChange={(e)=> setGasolina(Number(e.target.value)) }/><br />  
         
-          <input className="calcular" type="submit" value="Calcular" onClick={calcular}/>
+          <input className="calcular" type="submit" value="Calcular"/>
         </form>
 
         {info && Object.keys(info).length > 0 && (
